@@ -31,3 +31,41 @@ typedef struct emprestimo{
   int devolvido;
 } Emprestimo;
 
+void registarAluno(Aluno alunos[], *numAlunos){
+  if(*numAlunos < 3000){
+      printf("\nRegistrar novo aluno:\n");
+      printf("Matrícula: ");
+        scanf("%d", &alunos[*numAlunos].matricula);
+      printf("Nome: ");
+        scanf("%s", alunos[*numAlunos].nome);
+      printf("Curso: ");
+        scanf("%s", aluno[*numAlunos].curso);
+
+      alunos[*numAlunos].livros_na_posse = 0;
+      (*numAlunos)++;
+      ptintf("Novo Aluno Registado!! \n")
+  }else {
+        printf("Limite de alunos atingido!!!\n");
+    }
+}
+
+void registarLivro(Livro livros[], *numLivros){
+  if(*numLivros < 1000){
+      printf("\nRegistrar novo Livro:\n");
+      printf("ISBN: ");
+        scanf("%d", livros[*numLivros].isbn);
+      printf("Titulo: ");
+        scanf("%s", livros[*numLivros].titulo);
+      printf("Autores: ");
+        scanf("%s", livros[*numLivros].autores);
+      printf("Numero de exemplares: ");
+        scanf("%d", &livros[*numLivros].total_exemplares);
+      printf("Número de exemplares disponíveis para empréstimo: ");
+        scanf("%d", &livros[*numLivros].exemplares_disponiveis);
+        (*numLivros)++;
+      printf("Livro registrado com sucesso!!\n");
+  }else {
+        printf("Limite de Livros atingido!!!\n");
+    }
+}
+
