@@ -7,6 +7,7 @@
 #define MAX_NOME 100
 #define MAX_EMPRESTIMOS 5000
 
+
 //livros (ISBN (codigo de 13 digitos ex: 978-15-333-0227-3), _tulo, autores, número total de exemplares, e número de exemplares disponíveis para empréstimo)
 typedef struct livro{
     char isbn[13];
@@ -41,11 +42,11 @@ void registarAluno(Aluno alunos[], int *numAlunos){
       printf("Nome: ");
         scanf("%s", alunos[*numAlunos].nome);
       printf("Curso: ");
-        scanf("%s", aluno[*numAlunos].curso);
+        scanf("%s", alunos[*numAlunos].curso);
 
-      alunos[*numAlunos].livros_na_posse = 0;
+      alunos[*numAlunos].num_livros_na_posse = 0;
       (*numAlunos)++;
-      ptintf("Novo Aluno Registado!! \n")
+      printf("Novo Aluno Registado!! \n");
   }else {
         printf("Limite de alunos atingido!!!\n");
     }
@@ -63,7 +64,7 @@ void registarLivro(Livro livros[], int *numLivros){
       printf("Numero de exemplares: ");
         scanf("%d", &livros[*numLivros].total_exemplares);
       printf("Número de exemplares disponíveis para empréstimo: ");
-        scanf("%d", &livros[*numLivros].exemplares_disponiveis);
+        scanf("%d", &livros[*numLivros].disponiveis);
         (*numLivros)++;
       printf("Livro registrado com sucesso!!\n");
   }else {
@@ -90,17 +91,16 @@ void registarEmprestimo(Emprestimo emprestimos[], int *numEmprestimos, Livro liv
 
     if (!encontrado){
       printf("O Aluno não existe!\n");
-      return 0;
+      return;
     }
 
     printf("ISBN do Livro para emprestimo: ");
     scanf("%s", isbn);
 
     //loop para verificar de o Livro existe no sistema
-    for(int i = 0; i < numLivros; i++){
+    for(int i = 0; i < *numLivros; i++){
       if (strcmp(livros[i].isbn, isbn) == 0) {
-            // Verifica se há exemplares disponíveis
-            if (livros[i].exemplares_disponiveis > 0) {
+            if (livros[i].disponiveis > 0) {  //Há exemplares disponiveis?? 
 
                 // Atribui o valor da matricula do aluno ao emprestimo, atribui o valor armazenado em isbn para o isbn de emprestimo, e da inicio a devolvivo como NAO DEVOLVIDO (0). 
                 emprestimos[*numEmprestimos].matricula = matricula;
@@ -113,7 +113,7 @@ void registarEmprestimo(Emprestimo emprestimos[], int *numEmprestimos, Livro liv
                         alunos[j].num_livros_na_posse++;
                     }
                 }
-                livros[i].exemplares_disponiveis--;
+                livros[i].disponiveis--;
 
                 // numTotal de emprestimos
                 (*numEmprestimos)++; 
@@ -129,7 +129,7 @@ void registarEmprestimo(Emprestimo emprestimos[], int *numEmprestimos, Livro liv
     printf("O Livro Não existe no sistema.\n");
 }
 
-void registarDevolucao(Emprestimo emprestimo[], int *numEmprestimos, Livro livros[], int numlivros, Aluno alunos[], int numAlunos){
+void registarDevolucao(Emprestimo emprestimos[], int *numEmprestimos, Livro livros[], int numLivros, Aluno alunos[], int numAlunos){
   char isbn[13];
   int matricula;
   int encontrado = 0;
@@ -148,10 +148,10 @@ void registarDevolucao(Emprestimo emprestimo[], int *numEmprestimos, Livro livro
 
     if (!encontrado){
       printf("O Aluno não existe!\n");
-      return 0;
+      return;
     }
 
-    printf("ISBN do livro para devolucao: ")
+    printf("ISBN do livro para devolucao: ");
     scanf("%s", isbn);
 
     //VErificar se o livro existe
@@ -159,8 +159,8 @@ void registarDevolucao(Emprestimo emprestimo[], int *numEmprestimos, Livro livro
       if(strcmp(livros[i].isbn, isbn) == 0){
 
         //verificar se o livro foi emprestado ao aluno
-        for(int j = 0; j < numEmprestimos; j++ ){
-          if(emprestimos[j].matricula == matricula && strcmp(emprestimos[j].isbn, isbn) == 0 && emprestimo[j].devolvido == 0){
+        for(int j = 0; j < *numEmprestimos; j++ ){
+          if(emprestimos[j].matricula == matricula && strcmp(emprestimos[j].isbn, isbn) == 0 && emprestimos[j].devolvido == 0){
             emprestimos[j].devolvido = 1; //livro Devolvido
 
             //Atualizar num_livros_na_posse do aluno
@@ -172,31 +172,31 @@ void registarDevolucao(Emprestimo emprestimo[], int *numEmprestimos, Livro livro
             livros[i].disponiveis++;
 
             printf("Devolução Concluida!!\n");
-            return 0;
+            return;
           }
         }
         printf("Este livro não esta na posse do aluno!!\n");
-        return 0;
+        return;
       }
     }
     printf("O Livro não existe no sistema!!!\n");
-    return 0;
+    return;
 }
 
 void listarLivro(Livro livros[], int numLivros){
   char isbn[13];
   int encontrado = 0;
 
-  print("\nListar informação de livro \n");
+  printf("\nListar informação de livro \n");
 
   printf("ISBN do livro que pretende procurar: ");
   scanf("%s", isbn);
 
   //procurar livro
-  for(int i = 0; i > numLivros; i++){
+  for(int i = 0; i < numLivros; i++){
     if(strcmp(livros[i].isbn, isbn) == 0){
       printf("ISBN:  %s\n", livros[i].isbn);
-      ptintf("Titulo:  %s\n", livros[i].titulo);
+      printf("Titulo:  %s\n", livros[i].titulo);
       printf("Autores: %s\n", livros[i].autores);
       printf("Total de exemplares: %d\n", livros[i].total_exemplares);
       printf("Disponiveis: %d", livros[i].disponiveis);
@@ -212,17 +212,17 @@ void listarAluno(Aluno alunos[], int numAlunos){
   int matricula;
   int encontrado = 0;
 
-  print("\nListar informação de Aluno\n");
+  printf("\nListar informação de Aluno\n");
 
   printf("Apresenta a matricula do Aluno: ");
-  scanf("%d", matricula);
+  scanf("%d", &matricula);
 
-  //procurar livro
-  for(int i = 0; i > numAlunos; i++){
+  //procurar aluno
+  for(int i = 0; i < numAlunos; i++){
     if(alunos[i].matricula == matricula) {
-      printf("Matricula:  %s\n", alunos[i].matricula);
-      ptintf("Nome:  %s\n", alunos[i].nome);
-      printf("Numero de livros na sua posse: %s\n", alunos[i].num_livros_na_posse);
+      printf("Matricula:  %d\n", alunos[i].matricula);
+      printf("Nome:  %s\n", alunos[i].nome);
+      printf("Numero de livros na sua posse: %d\n", alunos[i].num_livros_na_posse);
       encontrado = 1;
     }
   }
@@ -245,17 +245,17 @@ int main(){
     printf("=====================================\n");
     printf("           MENU DE USUARIO           \n");
     printf("=====================================\n");
-    printf("1. Registar novo Aluno 1\n");
-    printf("2. Listar Aluno 2\n");
-    printf("3. Registar novo Livro 3\n");
-    printf("4. Listar Livro 4\n");
-    printf("5. Registar novo Emprestimo 5\n");
-    printf("6. Registar Devolucao 6\n")
-    printf("7. Sair\n");
+    printf("1. Registar novo Aluno .1\n");
+    printf("2. Listar Aluno .2\n");
+    printf("3. Registar novo Livro .3\n");
+    printf("4. Listar Livro .4\n");
+    printf("5. Registar novo Emprestimo .5\n");
+    printf("6. Registar Devolucao .6\n");
+    printf("7. Sair .7\n");
     printf("=====================================\n");
     
     printf("Escolha uma opção: ");
-    scanf("%d", escolha);
+    scanf("%d", &escolha);
 
     switch(escolha){
       case 1:
@@ -271,10 +271,10 @@ int main(){
         listarLivro(livros, numLivros);
       break;
       case 5:
-        registarEmprestimo(emprestimos, numEmprestimos, livros, numLivros, alunos, numAlunos);
+        registarEmprestimo(emprestimos, &numEmprestimos, livros, numLivros, alunos, numAlunos);
       break;
       case 6:
-        registarDevolucao(emprestimos, numEmprestimos, livros, numLivros, alunos, numAlunos);
+        registarDevolucao(emprestimos, &numEmprestimos, livros, numLivros, alunos, numAlunos);
       break;
       case 7:
         printf("A sair do programa!\n");
