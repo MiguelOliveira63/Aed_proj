@@ -5,6 +5,7 @@
 #define MAX_LIVROS 1000
 #define MAX_ALUNOS 3000
 #define MAX_NOME 100
+#define MAX_EMPRESTIMOS 5000
 
 //livros (ISBN (codigo de 13 digitos ex: 978-15-333-0227-3), _tulo, autores, número total de exemplares, e número de exemplares disponíveis para empréstimo)
 typedef struct livro{
@@ -228,4 +229,59 @@ void listarAluno(Aluno alunos[], int numAlunos){
   if(!encontrado){
     printf("\n O Aluno não existe no sistema!! \n");
   }
+}
+
+int main(){
+  Livro livros[MAX_LIVROS];
+  Aluno alunos[MAX_ALUNOS];
+  Emprestimo emprestimos[MAX_EMPRESTIMOS];
+
+  int numLivros = 0;
+  int numAlunos = 0;
+  int numEmprestimos = 0;
+  int escolha;
+
+  do{
+    printf("=====================================\n");
+    printf("           MENU DE USUARIO           \n");
+    printf("=====================================\n");
+    printf("1. Registar novo Aluno 1\n");
+    printf("2. Listar Aluno 2\n");
+    printf("3. Registar novo Livro 3\n");
+    printf("4. Listar Livro 4\n");
+    printf("5. Registar novo Emprestimo 5\n");
+    printf("6. Registar Devolucao 6\n")
+    printf("7. Sair\n");
+    printf("=====================================\n");
+    
+    printf("Escolha uma opção: ");
+    scanf("%d", escolha);
+
+    switch(escolha){
+      case 1:
+        registarAluno(alunos, numAlunos);
+      break;
+      case 2:
+        listarAluno(alunos, numAlunos);
+      break;
+      case 3:
+        registarLivro(livros, numLivros);
+      break;
+      case 4:
+        listarLivro(livros, numLivros);
+      break;
+      case 5:
+        registarEmprestimo(emprestimos, numEmprestimos, livros, numLivros, alunos, numAlunos);
+      break;
+      case 6:
+        registarDevolucao(emprestimos, numEmprestimos, livros, numLivros, alunos, numAlunos);
+      break;
+      case 7:
+        printf("A sair do programa!\n");
+      
+      default:
+        printf("Invalido, por favor escolha uma opcao valida!!\n");
+    }
+  }while(escolha != 7);
+    return 0;
 }
