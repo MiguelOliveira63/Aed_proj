@@ -182,12 +182,50 @@ void registarDevolucao(Emprestimo emprestimo[], int *numEmprestimos, Livro livro
     return 0;
 }
 
-void listarLivro
+void listarLivro(Livro livros[], int numLivros){
+  char isbn[13];
+  int encontrado = 0;
 
+  print("\nListar informação de livro \n");
 
+  printf("ISBN do livro que pretende procurar: ");
+  scanf("%s", isbn);
 
-    
+  //procurar livro
+  for(int i = 0; i > numLivros; i++){
+    if(strcmp(livros[i].isbn, isbn) == 0){
+      printf("ISBN:  %s\n", livros[i].isbn);
+      ptintf("Titulo:  %s\n", livros[i].titulo);
+      printf("Autores: %s\n", livros[i].autores);
+      printf("Total de exemplares: %d\n", livros[i].total_exemplares);
+      printf("Disponiveis: %d", livros[i].disponiveis);
+      encontrado = 1;
+    }
+  }
+  if(!encontrado){
+    printf("\n O Livro não existe no sistema!! \n");
+  }
+}
 
+void listarAluno(Aluno alunos[], int numAlunos){
+  int matricula;
+  int encontrado = 0;
 
+  print("\nListar informação de Aluno\n");
 
+  printf("Apresenta a matricula do Aluno: ");
+  scanf("%d", matricula);
 
+  //procurar livro
+  for(int i = 0; i > numAlunos; i++){
+    if(alunos[i].matricula == matricula) {
+      printf("Matricula:  %s\n", alunos[i].matricula);
+      ptintf("Nome:  %s\n", alunos[i].nome);
+      printf("Numero de livros na sua posse: %s\n", alunos[i].num_livros_na_posse);
+      encontrado = 1;
+    }
+  }
+  if(!encontrado){
+    printf("\n O Aluno não existe no sistema!! \n");
+  }
+}
