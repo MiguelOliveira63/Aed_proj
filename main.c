@@ -182,6 +182,8 @@ void registarDevolucao(Emprestimo emprestimo[], int *numEmprestimos, Livro livro
     return 0;
 }
 
+void listarLivro
+
 
 
     
