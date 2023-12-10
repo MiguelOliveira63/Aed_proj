@@ -254,18 +254,18 @@ int main(){
     printf("7. Sair .7\n");
     printf("=====================================\n");
     
-    printf("Escolha uma opção: ");
+    printf("Por favor escolha uma opcao\n");
     scanf("%d", &escolha);
 
     switch(escolha){
       case 1:
-        registarAluno(alunos, numAlunos);
+        registarAluno(alunos, &numAlunos);
       break;
       case 2:
         listarAluno(alunos, numAlunos);
       break;
       case 3:
-        registarLivro(livros, numLivros);
+        registarLivro(livros, &numLivros);
       break;
       case 4:
         listarLivro(livros, numLivros);
@@ -278,6 +278,7 @@ int main(){
       break;
       case 7:
         printf("A sair do programa!\n");
+      break;
       
       default:
         printf("Invalido, por favor escolha uma opcao valida!!\n");
