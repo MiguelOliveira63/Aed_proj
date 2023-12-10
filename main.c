@@ -109,7 +109,7 @@ void registarEmprestimo(Emprestimo emprestimos[], int *numEmprestimos, Livro liv
                 // Atualiza o numero de livros na posse do aluno e o nnumero de exemplares emprestados
                 for (int j = 0; j < numAlunos; j++) {
                     if (alunos[j].matricula == matricula) {
-                        alunos[j].livros_na_posse++;
+                        alunos[j].num_livros_na_posse++;
                     }
                 }
                 livros[i].exemplares_disponiveis--;
@@ -127,6 +127,61 @@ void registarEmprestimo(Emprestimo emprestimos[], int *numEmprestimos, Livro liv
     // Se o livro não for encontrado, exibe uma mensagem
     printf("O Livro Não existe no sistema.\n");
 }
+
+void registarDevolucao(Emprestimo emprestimo[], int *numEmprestimos, Livro livros[], int numlivros, Aluno alunos[], int numAlunos){
+  char isbn[13];
+  int matricula;
+  int encontrado = 0;
+
+  printf("\nRegistrar devolucao:\n");
+
+  printf("Matricula do Aluno com o livro: ");
+  scanf("%d", &matricula);
+
+    //loop para verificar se o aluno existe no sistema
+    for (int i = 0; i < numAlunos; i++) {
+        if (alunos[i].matricula == matricula) {
+            encontrado = 1;
+        }
+    }
+
+    if (!encontrado){
+      printf("O Aluno não existe!\n");
+      return 0;
+    }
+
+    printf("ISBN do livro para devolucao: ")
+    scanf("%s", isbn);
+
+    //VErificar se o livro existe
+    for(int i = 0; i < numLivros; i++){
+      if(strcmp(livros[i].isbn, isbn) == 0){
+
+        //verificar se o livro foi emprestado ao aluno
+        for(int j = 0; j < numEmprestimos; j++ ){
+          if(emprestimos[j].matricula == matricula && strcmp(emprestimos[j].isbn, isbn) == 0 && emprestimo[j].devolvido == 0){
+            emprestimos[j].devolvido = 1; //livro Devolvido
+
+            //Atualizar num_livros_na_posse do aluno
+            for(int a = 0; a < numAlunos; a++){
+              if(alunos[a].matricula == matricula){
+                alunos[a].num_livros_na_posse--;
+              }
+            }
+            livros[i].disponiveis++;
+
+            printf("Devolução Concluida!!\n");
+            return 0;
+          }
+        }
+        printf("Este livro não esta na posse do aluno!!\n");
+        return 0;
+      }
+    }
+    printf("O Livro não existe no sistema!!!\n");
+    return 0;
+}
+
 
 
     
