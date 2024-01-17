@@ -34,6 +34,36 @@ typedef struct emprestimo{
   int devolvido;
 } Emprestimo;
 
+void inicializarDados(Aluno alunos[], int *numAlunos, Livro livros[], int *numLivros) {
+    // Inicializar alunos
+    alunos[0].matricula = 1;
+    strcpy(alunos[0].nome, "Lourenço");
+    strcpy(alunos[0].curso, "Engenharia");
+    alunos[0].num_livros_na_posse = 0;
+
+    alunos[1].matricula = 2;
+    strcpy(alunos[1].nome, "Miguel");
+    strcpy(alunos[1].curso, "Ciencias da Computacao");
+    alunos[1].num_livros_na_posse = 0;
+
+    *numAlunos = 2;
+
+    // Inicializar livros
+    strcpy(livros[0].isbn, "978-15-333-0227-3");
+    strcpy(livros[0].titulo, "Introducao a Programacao");
+    strcpy(livros[0].autores, "matthew mcconaughey");
+    livros[0].total_exemplares = 5;
+    livros[0].disponiveis = 5;
+
+    strcpy(livros[1].isbn, "000-00-000-0000-0");
+    strcpy(livros[1].titulo, "Algoritmos e Estruturas de Dados");
+    strcpy(livros[1].autores, "Camoes, Santo Antonio");
+    livros[1].total_exemplares = 3;
+    livros[1].disponiveis = 3;
+
+    *numLivros = 2;
+}
+
 void registarAluno(Aluno alunos[], int *numAlunos) {
     if (*numAlunos < MAX_ALUNOS) {
         printf("\nRegistrar novo aluno:\n");
@@ -185,9 +215,9 @@ void registarDevolucao(Emprestimo emprestimos[], int *numEmprestimos, Livro livr
                 printf("Devolução Concluida!!\n");
                 return;
             }
-}
-printf("Este livro não está na posse do aluno!!\n");
-return;
+        }
+        printf("Este livro não está na posse do aluno!!\n");
+        return;
         }
     }
     printf("O Livro não existe no sistema!!!\n");
@@ -277,6 +307,56 @@ void listarTodosAlunos(Aluno alunos[], int numAlunos) {
     }
 }
 
+void listarLivrosAluno(Emprestimo emprestimos[], int numEmprestimos, Livro livros[], int numLivros, Aluno alunos[], int numAlunos) {
+    int matricula;
+    int encontrado = 0;
+
+    printf("\nListar livros na posse de um aluno\n");
+
+    printf("Informe a matrícula do aluno: ");
+    scanf("%d", &matricula);
+
+    // Verificar se o aluno existe no sistema
+    for (int i = 0; i < numAlunos; i++) {
+        if (alunos[i].matricula == matricula) {
+            encontrado = 1;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        printf("\nO aluno não foi encontrado no sistema.\n");
+        return;
+    }
+
+    // Listar os livros na posse do aluno
+    printf("\nLivros na posse do aluno (Matrícula: %d):\n", matricula);
+    printf("%-18s %-20s\n", "ISBN", "Título");
+
+    for (int i = 0; i < numEmprestimos; i++) {
+        if (emprestimos[i].matricula == matricula && emprestimos[i].devolvido == 0) {
+            for (int j = 0; j < numLivros; j++) {
+                int match = 1;
+                for (int k = 0; k < 13; k++) {
+                    if (emprestimos[i].isbn[k] != (livros[j].isbn[k] - '0')) {
+                        match = 0;
+                        break;
+                    }
+                }
+                if (match) {
+                    printf("%-18s %-20s\n", livros[j].isbn, livros[j].titulo);
+                    encontrado = 1;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!encontrado) {
+        printf("O aluno não possui livros na posse.\n");
+    }
+}
+
 int main(){
   Livro livros[MAX_LIVROS];
   Aluno alunos[MAX_ALUNOS];
@@ -287,6 +367,7 @@ int main(){
   int numEmprestimos = 0;
   int escolha;
 
+    inicializarDados(alunos, &numAlunos, livros, &numLivros);
   do{
     printf("=====================================\n");
     printf("           MENU DE USUARIO           \n");
@@ -294,11 +375,12 @@ int main(){
     printf("1. Registar novo Aluno .1\n");
     printf("2. Pesquisar Aluno .2\n");
     printf("3. Listar Todos os Aluno .3\n");
-    printf("4. Registar novo Livro .4\n");
-    printf("5. Pesquisar Livro .5\n");
-    printf("6. Listar Todos os Livro .6\n");
-    printf("7. Registar novo Emprestimo .7\n");
-    printf("8. Registar Devolucao .8\n");
+    printf("4. Listar Livros de um Aluno .4\n");
+    printf("5. Registar novo Livro .5\n");
+    printf("6. Pesquisar Livro .6\n");
+    printf("7. Listar Todos os Livro .7\n");
+    printf("8. Registar novo Emprestimo .8\n");
+    printf("9. Registar Devolucao .9\n");
     printf("0. Sair .0\n");
     printf("=====================================\n");
     
@@ -316,18 +398,21 @@ int main(){
         listarTodosAlunos(alunos, numAlunos);
       break;
       case 4:
-        registarLivro(livros, &numLivros);
+        listarLivrosAluno(emprestimos, numEmprestimos, livros, numLivros, alunos, numAlunos);
       break;
       case 5:
+        registarLivro(livros, &numLivros);
+      break;
+      case 6:
         listarLivro(livros, numLivros);
       break;
-      case 6: 
+      case 7:
         listarTodosLivros(livros, numLivros);
       break;
-      case 7:
+      case 8:
         registarEmprestimo(emprestimos, &numEmprestimos, livros, numLivros, alunos, numAlunos);
       break;
-      case 8:
+      case 9:
         registarDevolucao(emprestimos, &numEmprestimos, livros, numLivros, alunos, numAlunos);
       break;
       case 0:
